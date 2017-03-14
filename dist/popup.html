@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>sm-chrome-extension</title>
+
+        <link rel="stylesheet" href="popup.css" type="text/css" media="all" />
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <span data-tab-header="history">History</span>
+                <span data-tab-header="bookmarks">Bookmarks</span>
+                <span data-tab-header="cookies">Cookies</span>
+            </header>
+
+            <form id="filter" name="filter" autocomplete="off">
+                <input type="text" name="query" placeholder="Filter..." autofocus />
+                <button type="reset">clear</button>
+            </form>
+
+            <div id="actions">
+                <button data-action="clear">remove all</button>
+                <button data-action="save">save all</button>
+
+                <form data-action="cookie" name="add-cookie" autocomplete="off" class="hidden">
+                    <input type="text" name="name" placeholder="name" value="" />
+                    <input type="text" name="value" placeholder="value" value="" />
+                    <button type="reset">cancel</button> <button type="submit">add new cookie</button>
+                </form>
+            </div>
+
+            <div id="items">
+                <div class="hidden" data-tab-id="history"></div>
+                <div class="hidden" data-tab-id="bookmarks"></div>
+                <div class="hidden" data-tab-id="cookies"></div>
+            </div>
+        </div>
+
+        <div id="bookmarks-tree" class="hidden"> <span data-action="close">x</span>
+            <h3>Please, choose bookmarks folder:</h3>
+        </div>
+
+        <script src="popup.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+</html>
