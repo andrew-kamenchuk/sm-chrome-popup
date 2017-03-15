@@ -275,26 +275,36 @@ popup.onDocumentLoaded(() => {
                 break;
             case "select":
                 if (parentId && loadedItems.has(popup.HISTORY_ID) && loadedItems.has(popup.BOOKMARKS_ID)) {
+                    const history = loadedItems.get(popup.HISTORY_ID);
+                    const bookmarks = loadedItems.get(popup.BOOKMARKS_ID);
+
                     if (historyId > 0) {
-                        saveHistoryAsBookmark(historyId, parentId)
+                        const { title, url } = history.get(historyId);
+
+                        Bookmarks.create(title, url, parentId)
+                            .then(item => bookmarks.add(item))
+                            .then(item => popup.displayItemHtml(item, $(`#items > [data-tab-id=${popup.BOOKMARKS_ID}]`)))
                             .then(() => { delete bookmarksNode.historyId; bookmarksNode.hide(); })
-                            .then(() => popup.showMessage(
-                                "History entry saved as bookmark!",
-                                $(`#items > [data-tab-id=${popup.HISTORY_ID}] > [data-item-id="${historyId}"]`)
-                            ));
+                            .then(() => popup.showMessage("History entry saved as bookmark!",
+                                $(`#items > [data-tab-id=${popup.HISTORY_ID}] > [data-item-id="${historyId}"]`)))
+                            .catch(log);
                     } else if (-1 === historyId) { // save all visible
                         const promises = [];
 
                         $$(`#items > [data-tab-id=${popup.HISTORY_ID}] > [data-item-id]:not(.hidden)`).forEach(link => {
-                            promises.push(saveHistoryAsBookmark(link.getAttribute("data-item-id"), parentId));
+                            const { title, url } = history.get(link.getAttribute("data-item-id"));
+                            promises.push(Bookmarks.create(title, url, parentId)
+                                .then(item => bookmarks.add(item))
+                                .then(item => popup.displayItemHtml(item, $(`#items > [data-tab-id=${popup.BOOKMARKS_ID}]`)))
+                            );
                         });
 
                         Promise.all(promises)
                             .then(() => { delete bookmarksNode.historyId; bookmarksNode.hide(); })
-                            .then(() => popup.showMessage(
-                                "All history items have been saved!",
+                            .then(() => popup.showMessage("All history items have been saved!",
                                 $(`#items > [data-tab-id=${popup.HISTORY_ID}]`)
-                            ));
+                            ))
+                            .catch(log);
                     }
                 }
                 break;
@@ -318,11 +328,4 @@ popup.onDocumentLoaded(() => {
             return Promise.resolve();
         };
     }, 500);
-
-    function saveHistoryAsBookmark(historyId, parentId) {
-        const { title, url } = loadedItems.get(popup.HISTORY_ID).get(historyId);
-        return Bookmarks.create(title, url, parentId)
-            .then(item => loadedItems.get(popup.BOOKMARKS_ID).add(item))
-            .then(item => popup.displayItemHtml(item, $(`#items > [data-tab-id=${popup.BOOKMARKS_ID}]`)));
-    }
 });

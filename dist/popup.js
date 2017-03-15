@@ -708,21 +708,27 @@
                     break;
                 case "select":
                     if (parentId && loadedItems.has(__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]) && loadedItems.has(__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"])) {
+                        const history = loadedItems.get(__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]);
+                        const bookmarks = loadedItems.get(__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]);
+
                         if (historyId > 0) {
-                            saveHistoryAsBookmark(historyId, parentId).then(() => {
+                            const { title, url } = history.get(historyId);
+
+                            __WEBPACK_IMPORTED_MODULE_4__js_class_Bookmarks__["a" /* default */].create(title, url, parentId).then(item => bookmarks.add(item)).then(item => __WEBPACK_IMPORTED_MODULE_1__js_popup__["displayItemHtml"](item, $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]}]`))).then(() => {
                                 delete bookmarksNode.historyId;bookmarksNode.hide();
-                            }).then(() => __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("History entry saved as bookmark!", $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}] > [data-item-id="${historyId}"]`)));
+                            }).then(() => __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("History entry saved as bookmark!", $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}] > [data-item-id="${historyId}"]`))).catch(log);
                         } else if (-1 === historyId) {
                             // save all visible
                             const promises = [];
 
                             $$(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}] > [data-item-id]:not(.hidden)`).forEach(link => {
-                                promises.push(saveHistoryAsBookmark(link.getAttribute("data-item-id"), parentId));
+                                const { title, url } = history.get(link.getAttribute("data-item-id"));
+                                promises.push(__WEBPACK_IMPORTED_MODULE_4__js_class_Bookmarks__["a" /* default */].create(title, url, parentId).then(item => bookmarks.add(item)).then(item => __WEBPACK_IMPORTED_MODULE_1__js_popup__["displayItemHtml"](item, $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]}]`))));
                             });
 
                             Promise.all(promises).then(() => {
                                 delete bookmarksNode.historyId;bookmarksNode.hide();
-                            }).then(() => __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("All history items have been saved!", $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}]`)));
+                            }).then(() => __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("All history items have been saved!", $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}]`))).catch(log);
                         }
                     }
                     break;
@@ -746,11 +752,6 @@
                 return Promise.resolve();
             };
         }, 500);
-
-        function saveHistoryAsBookmark(historyId, parentId) {
-            const { title, url } = loadedItems.get(__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]).get(historyId);
-            return __WEBPACK_IMPORTED_MODULE_4__js_class_Bookmarks__["a" /* default */].create(title, url, parentId).then(item => loadedItems.get(__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]).add(item)).then(item => __WEBPACK_IMPORTED_MODULE_1__js_popup__["displayItemHtml"](item, $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]}]`)));
-        }
     });
 
     /***/

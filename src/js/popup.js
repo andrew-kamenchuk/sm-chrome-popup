@@ -54,8 +54,7 @@ export function displayItemHtml(item, block, prepend = false) {
         </form>`;
     }
 
-    const html
-        = `<a class="item" data-item-id="${item.id}" href="${item.url}">
+    const html = `<a class="item" data-item-id="${item.id}" href="${item.url}">
             <span data-action="goto" class="title-top">${encodeHTML(item.title)}</span>
             <span data-action="remove" title="remove"></span>
             <span data-action="save" title="save"></span>
