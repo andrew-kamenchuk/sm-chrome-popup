@@ -9,11 +9,11 @@
     </head>
     <body>
         <div id="main">
-            <header>
+            <div id="header">
                 <span data-tab-header="history">History</span>
                 <span data-tab-header="bookmarks">Bookmarks</span>
                 <span data-tab-header="cookies">Cookies</span>
-            </header>
+            </div>
 
             <form id="filter" name="filter" autocomplete="off">
                 <input type="text" name="query" placeholder="Filter..." autofocus />
@@ -24,7 +24,7 @@
                 <button data-action="clear">remove all</button>
                 <button data-action="save">save all</button>
 
-                <form data-action="cookie" name="add-cookie" autocomplete="off" class="hidden">
+                <form data-action="cookie" name="add-cookie" autocomplete="off">
                     <input type="text" name="name" placeholder="name" value="" />
                     <input type="text" name="value" placeholder="value" value="" />
                     <button type="reset">cancel</button> <button type="submit">add new cookie</button>
@@ -32,9 +32,9 @@
             </div>
 
             <div id="items">
-                <div class="hidden" data-tab-id="history"></div>
-                <div class="hidden" data-tab-id="bookmarks"></div>
-                <div class="hidden" data-tab-id="cookies"></div>
+                <div data-tab-id="history"></div>
+                <div data-tab-id="bookmarks"></div>
+                <div data-tab-id="cookies"></div>
             </div>
         </div>
 

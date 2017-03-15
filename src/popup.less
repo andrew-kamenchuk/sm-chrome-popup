@@ -16,7 +16,39 @@ body {
     width: 350px;
 }
 
-header {
+.tabHeader(@tab, @color) {
+    body:not([data-active-id=@{tab}]) #header > span[data-tab-header=@{tab}]:hover {
+        box-shadow: 0 2px 0 @color;
+    }
+
+    body[data-active-id=@{tab}] #header > span[data-tab-header=@{tab}] {
+        border-color: @color;
+    }
+}
+
+.tabHeader(history, @blue);
+.tabHeader(bookmarks, @green);
+.tabHeader(cookies, @red);
+
+.activeItems(@activeId) {
+    body[data-active-id=@{activeId}]  #items > :not([data-tab-id=@{activeId}]) {
+        .hidden;
+    }
+}
+
+.activeItems(history);
+.activeItems(cookies);
+.activeItems(bookmarks);
+
+body:not([data-active-id=history]) #actions > [data-action=save] {
+    .hidden;
+}
+
+body:not([data-active-id=cookies]) #actions > [data-action=cookie] {
+    .hidden;
+}
+
+#header {
     text-align: center;
 
     & > span[data-tab-header] {
@@ -25,35 +57,13 @@ header {
         width: 31%;
         text-transform: uppercase;
 
-        &.active {
-            /* border-color: @black; */
-        }
-
         &:hover {
             cursor: pointer;
         }
     }
 }
 
-.hover-tab-header(@tab, @color) {
-    header > span[data-tab-header=@{tab}]:hover {
-        box-shadow: 0 2px 0 @color;
-    }
-
-    header > span[data-tab-header=@{tab}].active {
-        border-color: @color;
-    }
-}
-
-.hover-tab-header(history,    @blue);
-.hover-tab-header(bookmarks, @green);
-.hover-tab-header(cookies,    @red);
-
 #items {
-    & > [data-tab-id].active {
-        display: block;
-    }
-
     a.item {
         color: @black;
         display: block;

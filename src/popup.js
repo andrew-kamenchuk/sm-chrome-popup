@@ -42,7 +42,7 @@ chrome.tabs.query({ active: true }, tabs => {
 
             loadedItems.set(popup.HISTORY_ID, history);
         })
-        .then(() => $(`header > [data-tab-header=${popup.HISTORY_ID}]`).dispatchEvent(new Event("click")));
+        .then(() => $(`#header > [data-tab-header=${popup.HISTORY_ID}]`).dispatchEvent(new Event("click")));
 
     Bookmarks.load(origin)
         .then(bookmarks => {
@@ -68,7 +68,7 @@ chrome.tabs.query({ active: true }, tabs => {
 });
 
 popup.onDocumentLoaded(() => {
-    const headers = $$("header > [data-tab-header]");
+    const headers = $$("#header > [data-tab-header]");
 
     const form = $("form[name=filter]");
     const input = form.querySelector("input[name=query]");
@@ -87,17 +87,7 @@ popup.onDocumentLoaded(() => {
 
             activeItemsId = id;
 
-            headers.forEach(h =>
-                h.classList.toggle("active", id === h.getAttribute("data-tab-header"))
-            );
-
-            $$("#items > [data-tab-id]").forEach(tab =>
-                tab.classList.toggle("hidden", id !== tab.getAttribute("data-tab-id"))
-            );
-
-            $("#actions > [data-action=cookie]").classList.toggle("hidden", id !== popup.COOKIES_ID);
-
-            $("#actions > [data-action=save]").classList.toggle("hidden", id !== popup.HISTORY_ID);
+            $("body").setAttribute("data-active-id", activeItemsId);
 
             updateBadge();
         });

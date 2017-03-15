@@ -489,7 +489,7 @@
             }
 
             loadedItems.set(__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"], history);
-        }).then(() => $(`header > [data-tab-header=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}]`).dispatchEvent(new Event("click")));
+        }).then(() => $(`#header > [data-tab-header=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]}]`).dispatchEvent(new Event("click")));
 
         __WEBPACK_IMPORTED_MODULE_4__js_class_Bookmarks__["a" /* default */].load(origin).then(bookmarks => {
             const htmlBlock = $(`#items > [data-tab-id=${__WEBPACK_IMPORTED_MODULE_1__js_popup__["BOOKMARKS_ID"]}`);
@@ -513,7 +513,7 @@
     });
 
     __WEBPACK_IMPORTED_MODULE_1__js_popup__["onDocumentLoaded"](() => {
-        const headers = $$("header > [data-tab-header]");
+        const headers = $$("#header > [data-tab-header]");
 
         const form = $("form[name=filter]");
         const input = form.querySelector("input[name=query]");
@@ -532,13 +532,7 @@
 
                 activeItemsId = id;
 
-                headers.forEach(h => h.classList.toggle("active", id === h.getAttribute("data-tab-header")));
-
-                $$("#items > [data-tab-id]").forEach(tab => tab.classList.toggle("hidden", id !== tab.getAttribute("data-tab-id")));
-
-                $("#actions > [data-action=cookie]").classList.toggle("hidden", id !== __WEBPACK_IMPORTED_MODULE_1__js_popup__["COOKIES_ID"]);
-
-                $("#actions > [data-action=save]").classList.toggle("hidden", id !== __WEBPACK_IMPORTED_MODULE_1__js_popup__["HISTORY_ID"]);
+                $("body").setAttribute("data-active-id", activeItemsId);
 
                 updateBadge();
             });
