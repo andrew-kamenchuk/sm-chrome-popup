@@ -595,7 +595,7 @@
                         id !== __WEBPACK_IMPORTED_MODULE_1__js_popup__["COOKIES_ID"] && chrome.tabs.create({ url: parent.getAttribute("href"), active: true });
                         break;
                     case "save":
-                        loadedItems.get(id).save(itemId).then(log).then(item => item && __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("Item has been saved!", parent));
+                        loadedItems.get(id).save(itemId).then(item => item && __WEBPACK_IMPORTED_MODULE_1__js_popup__["showMessage"]("Item has been saved!", parent));
                         break;
                     case "remove":
                         loadedItems.get(id).remove(itemId).then(() => parent.remove()).then(updateBadge);

@@ -156,7 +156,7 @@ popup.onDocumentLoaded(() => {
                     id !== popup.COOKIES_ID && chrome.tabs.create({ url: parent.getAttribute("href"), active: true });
                     break;
                 case "save":
-                    loadedItems.get(id).save(itemId).then(log).then(item => item && popup.showMessage("Item has been saved!", parent));
+                    loadedItems.get(id).save(itemId).then(item => item && popup.showMessage("Item has been saved!", parent));
                     break;
                 case "remove":
                     loadedItems.get(id).remove(itemId).then(() => parent.remove()).then(updateBadge);
