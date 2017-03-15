@@ -21,7 +21,7 @@ const updateBadge = () => {
     }
 };
 
-chrome.tabs.query({ active: true }, tabs => {
+chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
     if (!Array.isArray(tabs) || !tabs.length) {
         throw new Error("This should never happen");
     }
