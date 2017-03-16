@@ -54,7 +54,7 @@ export default class Items {
     }
 
     search(query) {
-        return this.toArray().filter(item => Items.match(item.title, query));
+        return this.toArray().filter(item => this.constructor.match(item.title, query));
     }
 
     static match(string, query) {
