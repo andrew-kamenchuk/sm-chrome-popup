@@ -1,6 +1,6 @@
 {
     "name": "sm-chrome-popup",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Chrome Extension",
     "repository": {
       "type": "git",
@@ -15,11 +15,11 @@
     ],
     "scripts": {
         "clean": "rm -rf ./build ./dist",
-        "prepare": "mkdir ./dist ./build && cp ./src/manifest.json ./src/icon.png ./src/popup.html ./dist",
+        "prepare": "mkdir ./dist ./build && cp -r ./src/icons ./src/manifest.json ./src/popup.html ./dist",
         "styles": "lessc ./src/popup.less ./build/popup.css && cleancss -o ./dist/popup.css ./build/popup.css",
-        "webpack": "webpack ./src/popup.js ./build/popup.js",
-        "babel": "babel ./build/popup.js --out-file ./dist/popup.js",
-        "scripts": "npm run webpack && npm run babel",
+        "webpack": "webpack popup=./src/popup.js ./build/[name].js",
+        "babel": "babel ./build --out-dir ./dist",
+        "scripts": "cp ./src/background.js ./build && npm run webpack && npm run babel",
         "build": "npm run clean && npm run prepare && npm run styles && npm run scripts"
     },
     "author": "Andrew Kamenchuk <andrew.kamenchuk@gmail.com>",
