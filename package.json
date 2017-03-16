@@ -2,6 +2,17 @@
     "name": "sm-chrome-popup",
     "version": "1.0.0",
     "description": "Chrome Extension",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/andrew-kamenchuk/sm-chrome-popup.git"
+    },
+    "keywords": [
+        "chrome",
+        "extension",
+        "history",
+        "bookmarks",
+        "cookies"
+    ],
     "scripts": {
         "clean": "rm -rf ./build ./dist",
         "prepare": "mkdir ./dist ./build && cp ./src/manifest.json ./src/icon.png ./src/popup.html ./dist",
