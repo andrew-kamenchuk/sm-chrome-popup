@@ -1,19 +1,10 @@
 /* global chrome */
 import Items from "./Items";
-import { parseURL } from "../util";
 
 export default class Cookies extends Items {
 
     add(item) {
         item.id = item.title = item.name;
-
-        if (Object.prototype.hasOwnProperty.call(item, "url")) {
-            const [host, path, protocol] = parseURL(item.url, "host", "pathname", "protocol");
-
-            item.domain = host;
-            item.path = path;
-            item.secure = "https:" === protocol;
-        }
 
         return super.add(item);
     }

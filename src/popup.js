@@ -197,9 +197,9 @@ popup.onDocumentLoaded(() => {
 
         const value = this.querySelector("[name=value]").value;
 
-        const url = util.parseURL(currentTab.url, "origin");
+        const { hostname: domain, pathname: path, protocol } = util.parseURL(currentTab.url);
 
-        loadedItems.get(popup.COOKIES_ID).add({ name, value, url });
+        loadedItems.get(popup.COOKIES_ID).add({ name, value, domain, path, secure: "https:" === protocol });
 
         loadedItems.get(popup.COOKIES_ID).save(name)
             .then(item =>
