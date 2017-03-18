@@ -1,19 +1,15 @@
-export const parseURL = (() => {
-    const parser = document.createElement("a");
+export const parseURL = (url, ...parts) => {
+    url = new URL(url);
 
-    return (url, ...parts) => {
-        parser.setAttribute("href", url);
-
-        switch (parts.length) {
-            case 0:
-                return Object.assign({}, parser);
-            case 1:
-                return parser[parts[0]];
-            default:
-                return parts.map(part => parser[part]);
-        }
-    };
-})();
+    switch (parts.length) {
+        case 0:
+            return url;
+        case 1:
+            return url[parts[0]];
+        default:
+            return parts.map(part => url[part]);
+    }
+};
 
 export const encodeHTML = (() => {
     const encoder = document.createElement("textarea");
