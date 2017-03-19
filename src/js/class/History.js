@@ -17,13 +17,15 @@ export default class History extends Items {
         );
     }
 
-    static load(url) {
+    static load(hostname) {
         // eslint-disable-next-line no-magic-numbers
         const startTime = new Date() - 30 * 24 * 3600 * 1000;
 
         return new Promise(resolve =>
-            chrome.history.search({ text: url, startTime, maxResults: 100 }, items =>
-                resolve(new History(items.filter(item => item.title.length > 0)))
+            chrome.history.search({ text: hostname, startTime, maxResults: 100 }, items =>
+                resolve(new History(items.filter(item =>
+                    item.title.length > 0 && hostname === parseURL(item.url, "hostname")
+                )))
             )
         );
     }
