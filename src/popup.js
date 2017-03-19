@@ -7,13 +7,9 @@ import Bookmarks from "./js/class/Bookmarks";
 
 const log = util.createLogger("main");
 
-const { $, $$ } = popup;
+const { $, $$, loadedItems } = popup;
 
-let currentTab;
-
-const loadedItems = new Map();
-
-let activeItemsId;
+let currentTab, activeItemsId;
 
 const updateBadge = () => {
     if (activeItemsId && loadedItems.has(activeItemsId)) {
@@ -28,43 +24,19 @@ chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
 
     currentTab = tabs[0];
 
-    log("begin");
-
     const [host, origin] = util.parseURL(currentTab.url, "host", "origin");
 
+    log(origin);
+
     History.load(host)
-        .then(history => {
-            const htmlBlock = $(`#items > [data-tab-id=${popup.HISTORY_ID}`);
-
-            for (const item of history) {
-                popup.displayItemHtml(item, htmlBlock);
-            }
-
-            loadedItems.set(popup.HISTORY_ID, history);
-        })
+        .then(popup.displayItemsHtml(popup.HISTORY_ID))
         .then(() => $(`#header > [data-tab-header=${popup.HISTORY_ID}]`).dispatchEvent(new Event("click")));
 
     Bookmarks.load(origin)
-        .then(bookmarks => {
-            const htmlBlock = $(`#items > [data-tab-id=${popup.BOOKMARKS_ID}`);
-
-            for (const item of bookmarks) {
-                popup.displayItemHtml(item, htmlBlock);
-            }
-
-            loadedItems.set(popup.BOOKMARKS_ID, bookmarks);
-        });
+        .then(popup.displayItemsHtml(popup.BOOKMARKS_ID));
 
     Cookies.load(currentTab.url)
-        .then(cookies => {
-            const htmlBlock = $(`#items > [data-tab-id=${popup.COOKIES_ID}`);
-
-            for (const item of cookies) {
-                popup.displayItemHtml(item, htmlBlock);
-            }
-
-            loadedItems.set(popup.COOKIES_ID, cookies);
-        });
+        .then(popup.displayItemsHtml(popup.COOKIES_ID));
 });
 
 popup.onDocumentLoaded(() => {

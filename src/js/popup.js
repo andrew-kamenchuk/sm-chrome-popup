@@ -4,7 +4,7 @@ import { encodeHTML } from "./util";
 export const $ = document.querySelector.bind(document);
 export const $$ = document.querySelectorAll.bind(document);
 
-export function showMessage(message, where = $("body"), { hideAfter = 1000, className = "message" } = {}) {
+export const showMessage = (message, where = $("body"), { hideAfter = 1000, className = "message" } = {}) => {
     const block = document.createElement("div");
 
     block.className = className;
@@ -13,15 +13,15 @@ export function showMessage(message, where = $("body"), { hideAfter = 1000, clas
     where.appendChild(block);
 
     return new Promise(resolve => setTimeout(() => { block.remove(); resolve(); }, hideAfter));
-}
+};
 
-export function onDocumentLoaded(callback) {
+export const onDocumentLoaded = callback => {
     if ("loading" === document.readyState) {
         return void document.addEventListener("DOMContentLoaded", callback);
     }
 
     callback();
-}
+};
 
 export const HISTORY_ID = "history";
 export const COOKIES_ID = "cookies";
@@ -33,9 +33,9 @@ const badgeColors = {
     [COOKIES_ID]: "#A00",
 };
 
-export function updateBadge(tabId, itemsId, itemsCount) {
+export const updateBadge = (tabId, itemsId, itemsCount) => {
     chrome.browserAction.setBadgeText({
-        text: itemsCount > 1000 ? "999+" : itemsCount.toString(),
+        text: itemsCount > 999 ? "999+" : itemsCount.toString(),
         tabId,
     });
 
@@ -43,12 +43,12 @@ export function updateBadge(tabId, itemsId, itemsCount) {
         color: badgeColors[itemsId],
         tabId,
     });
-}
+};
 
-export function displayItemHtml(item, block, prepend = false) {
+export const displayItemHtml = (item, block, prepend = false) => {
     let form = "";
 
-    if (Object.prototype.hasOwnProperty.call(item, "value")) {
+    if ("value" in item) {
         form = `<form name="${item.id}">
             <input type="text" value="${item.value}" name="${item.title}" />
         </form>`;
@@ -67,9 +67,19 @@ export function displayItemHtml(item, block, prepend = false) {
     } else {
         block.innerHTML += html;
     }
-}
+};
 
-export function buildBookmarksHtmlTree(tree, depth = 0) {
+export const loadedItems = new Map();
+
+export const displayItemsHtml = itemsId => items => {
+    const htmlBlock = $(`#items > [data-tab-id=${itemsId}]`);
+    for (const item of items) {
+        displayItemHtml(item, htmlBlock);
+    }
+    loadedItems.set(itemsId, items);
+};
+
+export const buildBookmarksHtmlTree = (tree, depth = 0) => {
     let html = "<ul>";
 
     for (const item of tree) {
@@ -95,4 +105,4 @@ export function buildBookmarksHtmlTree(tree, depth = 0) {
     html += "</ul>";
 
     return html;
-}
+};
