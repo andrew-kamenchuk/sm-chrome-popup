@@ -46,20 +46,12 @@ export const updateBadge = (tabId, itemsId, itemsCount) => {
 };
 
 export const displayItemHtml = (item, block, prepend = false) => {
-    let form = "";
-
-    if ("value" in item) {
-        form = `<form name="${item.id}">
-            <input type="text" value="${item.value}" name="${item.title}" />
-        </form>`;
-    }
-
     const html = `<a class="item" data-item-id="${item.id}" href="${item.url}">
             <span data-action="goto" class="title-top">${encodeHTML(item.title)}</span>
             <span data-action="remove" title="remove"></span>
             <span data-action="save" title="save"></span>
             <span data-action="goto" class="title-bottom">path: ${item.path}</span>
-            ${form}
+            ${"value" in item ? `<input type="text" value="${item.value}" name="${item.title}" />` : ""}
         </a>`;
 
     if (prepend) {
