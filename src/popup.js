@@ -138,18 +138,9 @@ popup.onDocumentLoaded(() => {
 
         const items = loadedItems.get(activeItemsId);
 
-        $$(`#items > [data-tab-id=${activeItemsId}] > a:not(.hidden)`).forEach(link =>
-            items.remove(link.getAttribute("data-item-id")).then(() => link.remove()).then(updateBadge)
-        );
-    });
-});
-
-popup.onDocumentLoaded(() => {
-    $("#actions > [data-action=save]").addEventListener("click", () => {
-        if (activeItemsId === popup.HISTORY_ID && loadedItems.has(activeItemsId)) {
-            $("#bookmarks-tree").historyId = -1;
-            $("#bookmarks-tree").show && $("#bookmarks-tree").show();
-        }
+        Promise.all(Array.from($$(`#items > [data-tab-id=${activeItemsId}] > a:not(.hidden)`)).map(link =>
+            items.remove(link.getAttribute("data-item-id")).then(() => link.remove())
+        )).then(updateBadge).catch(log);
     });
 });
 
@@ -203,6 +194,13 @@ popup.onDocumentLoaded(() => {
         $("#main").classList.remove("hidden");
         bookmarksNode.classList.add("hidden");
     };
+
+    $("#actions > [data-action=save]").addEventListener("click", () => {
+        if (activeItemsId === popup.HISTORY_ID && loadedItems.has(activeItemsId)) {
+            bookmarksNode.historyId = -1;
+            bookmarksNode.show();
+        }
+    });
 
     bookmarksNode.addEventListener("click", event => {
         event.preventDefault();
@@ -276,18 +274,10 @@ popup.onDocumentLoaded(() => {
         }
     });
 
-    const i = setInterval(() => {
-        if (!loadedItems.has(popup.HISTORY_ID)) {
-            return;
-        }
+    History.prototype.save = id => {
+        bookmarksNode.historyId = id;
+        bookmarksNode.show();
 
-        clearInterval(i);
-
-        loadedItems.get(popup.HISTORY_ID).save = id => {
-            bookmarksNode.historyId = id;
-            bookmarksNode.show();
-
-            return Promise.resolve();
-        };
-    }, 500);
+        return Promise.resolve();
+    };
 });

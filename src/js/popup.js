@@ -77,6 +77,7 @@ export const displayItemsHtml = itemsId => items => {
         displayItemHtml(item, htmlBlock);
     }
     loadedItems.set(itemsId, items);
+    return items;
 };
 
 export const buildBookmarksHtmlTree = (tree, depth = 0) => {
